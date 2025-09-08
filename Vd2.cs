@@ -2,7 +2,7 @@
 // Chương trình quản lý trường học bằng C# cực kỳ BAD CODE
 // Gồm: Sinh viên, Giáo viên, Môn học, Đăng ký, Điểm
 // Tất cả lưu bằng List<string> kiểu "id|field1|field2|..."
-// DNA
+
 using System;
 using System.Collections.Generic;
 
@@ -49,49 +49,78 @@ public class BadSchoolProgram
 
                     if (smenu == 1)
                     {
-                        Console.Write("Nhap id: ");
+                        Console.Write("Nhập ID: ");
                         string id = Console.ReadLine();
-                        Console.Write("Nhap ten: ");
+
+                        Console.Write("Nhập tên: ");
                         string name = Console.ReadLine();
-                        Console.Write("Nhap tuoi: ");
-                        int age = int.Parse(Console.ReadLine());
-                        Console.Write("Nhap GPA: ");
-                        double gpa = double.Parse(Console.ReadLine());
-                        students.Add(id + "|" + name + "|" + age + "|" + gpa);
+
+                        Console.Write("Nhập tuổi: ");
+                        if (!int.TryParse(Console.ReadLine(), out int age))
+                        {
+                            Console.WriteLine("❌ Tuổi không hợp lệ!");
+                            return;
+                        }
+
+                        Console.Write("Nhập GPA: ");
+                        if (!double.TryParse(Console.ReadLine(), out double gpa))
+                        {
+                            Console.WriteLine("❌ GPA không hợp lệ!");
+                            return;
+                        }
+
+                        students.Add($"{id}|{name}|{age}|{gpa}");
                     }
                     else if (smenu == 2)
                     {
-                        Console.Write("Nhap id can xoa: ");
+                        Console.Write("Nhập ID cần xóa: ");
                         string id = Console.ReadLine();
-                        for (int i = 0; i < students.Count; i++)
+
+                        int indexToRemove = students.FindIndex(s => s.Split('|')[0] == id);
+                        if (indexToRemove != -1)
                         {
-                            string[] parts = students[i].Split('|');
-                            if (parts[0] == id)
-                            {
-                                students.RemoveAt(i);
-                                break;
-                            }
+                            students.RemoveAt(indexToRemove);
+                            Console.WriteLine("✅ Đã xóa sinh viên.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("❌ Không tìm thấy sinh viên với ID đó.");
                         }
                     }
                     else if (smenu == 3)
                     {
-                        Console.Write("Nhap id can cap nhat: ");
+                        Console.Write("Nhập ID cần cập nhật: ");
                         string id = Console.ReadLine();
-                        for (int i = 0; i < students.Count; i++)
+
+                        int indexToUpdate = students.FindIndex(s => s.Split('|')[0] == id);
+                        if (indexToUpdate != -1)
                         {
-                            string[] parts = students[i].Split('|');
-                            if (parts[0] == id)
+                            Console.Write("Nhập tên mới: ");
+                            string name = Console.ReadLine();
+
+                            Console.Write("Nhập tuổi mới: ");
+                            if (!int.TryParse(Console.ReadLine(), out int age))
                             {
-                                Console.Write("Nhap ten moi: ");
-                                string name = Console.ReadLine();
-                                Console.Write("Nhap tuoi moi: ");
-                                int age = int.Parse(Console.ReadLine());
-                                Console.Write("Nhap GPA moi: ");
-                                double gpa = double.Parse(Console.ReadLine());
-                                students[i] = id + "|" + name + "|" + age + "|" + gpa;
+                                Console.WriteLine("❌ Tuổi không hợp lệ!");
+                                return;
                             }
+
+                            Console.Write("Nhập GPA mới: ");
+                            if (!double.TryParse(Console.ReadLine(), out double gpa))
+                            {
+                                Console.WriteLine("❌ GPA không hợp lệ!");
+                                return;
+                            }
+
+                            students[indexToUpdate] = $"{id}|{name}|{age}|{gpa}";
+                            Console.WriteLine("✅ Đã cập nhật sinh viên.");
+                        }
+                        else
+                        {
+                            Console.WriteLine("❌ Không tìm thấy sinh viên với ID đó.");
                         }
                     }
+
                     else if (smenu == 4)
                     {
                         foreach (var s in students)
